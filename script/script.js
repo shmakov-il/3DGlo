@@ -1,12 +1,12 @@
 window.addEventListener('DOMContentLoaded', () => {
 
   // Timer
-  function countTimer(deadline) {
+  const countTimer = deadline => {
     const timerHours = document.getElementById('timer-hours'),
       timerMinutes = document.getElementById('timer-minutes'),
       timerSeconds = document.getElementById('timer-seconds');
 
-    function getTimeRemaining() {
+    const getTimeRemaining = () => {
       const dateStop = new Date(deadline).getTime(),
         dateNow = new Date().getTime(),
         timeRemaining = (dateStop - dateNow) / 1000,
@@ -14,9 +14,9 @@ window.addEventListener('DOMContentLoaded', () => {
         minutes = Math.floor((timeRemaining / 60) % 60),
         hours = Math.floor(timeRemaining / 60 / 60);
       return { timeRemaining, hours, minutes, seconds };
-    }
+    };
 
-    function updateClock() {
+    const updateClock = () => {
       const timer = getTimeRemaining();
       if (timer.timeRemaining > 0) {
         setInterval(updateClock, 1000);
@@ -41,15 +41,59 @@ window.addEventListener('DOMContentLoaded', () => {
         timerMinutes.textContent = '00';
         timerSeconds.textContent = '00';
       }
-    }
+    };
     updateClock();
-  }
-  countTimer('23 february 2021 13:47:00');
+  };
+  countTimer('24 february 2021 13:47:00');
+
+
+  // Menu
+  const toggleMenu = () => {
+    const btnMenu = document.querySelector('.menu'),
+      menu = document.querySelector('menu'),
+      btnCloseMenu = document.querySelector('.close-btn'),
+      menuItems = menu.querySelectorAll('ul > li');
+
+    const handlerMenu = () => {
+      menu.classList.toggle('active-menu');
+    };
+
+    btnMenu.addEventListener('click', handlerMenu);
+    btnCloseMenu.addEventListener('click', handlerMenu);
+    menuItems.forEach(item => item.addEventListener('click', handlerMenu));
 
 
 
+  };
+  toggleMenu();
+
+
+  // PopUp
+  const togglePopUp = () => {
+    const popup = document.querySelector('.popup'),
+      btnPopup = document.querySelectorAll('.popup-btn'),
+      btnPopupClose = document.querySelector('.popup-close');
+
+    btnPopup.forEach(item => {
+      item.addEventListener('click', () => {
+        popup.style.display = 'block';
+      });
+    });
+
+    btnPopupClose.addEventListener('click', () => {
+      popup.style.display = 'none';
+    });
+
+
+
+
+
+  };
+  togglePopUp();
 
 
 
 
 });
+
+
