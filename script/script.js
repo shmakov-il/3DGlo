@@ -18,14 +18,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
     function updateClock() {
       const timer = getTimeRemaining();
-      timerHours.textContent = timer.hours;
-      timerMinutes.textContent = timer.minutes;
-      timerSeconds.textContent = timer.seconds;
       if (timer.timeRemaining > 0) {
-        setTimeout(updateClock, 1000);
+        timerHours.textContent = timer.hours;
+        timerMinutes.textContent = timer.minutes;
+        timerSeconds.textContent = timer.seconds;
       }
     }
-    updateClock();
+    setInterval(updateClock, 1000);
   }
   countTimer('24 february 2021');
 
