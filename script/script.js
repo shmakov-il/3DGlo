@@ -13,38 +13,39 @@ window.addEventListener('DOMContentLoaded', () => {
         seconds = Math.floor(timeRemaining % 60),
         minutes = Math.floor((timeRemaining / 60) % 60),
         hours = Math.floor(timeRemaining / 60 / 60);
-      return { timeRemaining, hours, minutes, seconds };
+      const addZero = number => {
+        if (number < 10) {
+          number = '0' + number;
+          return number;
+        } else {
+          return number;
+        }
+      };
+      return {
+        timeRemaining,
+        hours: addZero(hours),
+        minutes: addZero(minutes),
+        seconds: addZero(seconds)
+      };
     };
 
     const updateClock = () => {
       const timer = getTimeRemaining();
       if (timer.timeRemaining > 0) {
-        setInterval(updateClock, 1000);
-        if (timer.hours < 10) {
-          timerHours.textContent = '0' + timer.hours;
-        } else {
-          timerHours.textContent = timer.hours;
-        }
-        if (timer.minutes < 10) {
-          timerMinutes.textContent = '0' + timer.minutes;
-        } else {
-          timerMinutes.textContent = timer.minutes;
-        }
-        if (timer.seconds < 10) {
-          timerSeconds.textContent = '0' + timer.seconds;
-        } else {
-          timerSeconds.textContent = timer.seconds;
-        }
-      } else {
+        timerHours.textContent = timer.hours;
+        timerMinutes.textContent = timer.minutes;
+        timerSeconds.textContent = timer.seconds;
+      }
+      if (timer.timeRemaining <= 0) {
         clearInterval(updateClock);
         timerHours.textContent = '00';
         timerMinutes.textContent = '00';
         timerSeconds.textContent = '00';
       }
     };
-    updateClock();
+    setInterval(updateClock, 1000);
   };
-  countTimer('24 february 2021 13:47:00');
+  countTimer('25 february 2021 13:47:00');
 
 
   // Menu
@@ -61,11 +62,9 @@ window.addEventListener('DOMContentLoaded', () => {
     btnMenu.addEventListener('click', handlerMenu);
     btnCloseMenu.addEventListener('click', handlerMenu);
     menuItems.forEach(item => item.addEventListener('click', handlerMenu));
-
-
-
   };
   toggleMenu();
+
 
 
   // PopUp

@@ -2,12 +2,6 @@
 // Задаем текущую дату, относительно которой будем получать день недели, время, время суток и время до нового года
 const date = new Date();
 
-// Создаем функцию, позволяющую выводить на экран нужный день недели
-function getWeekDay(date) {
-  const weekDays = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'];
-  return weekDays[date.getDay()];
-}
-
 // Рассчитаем время до нового года
 function getNewYear(newYear) {
   const dayNow = date.getTime(),
@@ -39,9 +33,9 @@ function getTimeOfDay() {
 getTimeOfDay();
 
 // Вывод на экран
-document.querySelector('.hello').innerHTML = (`
+document.body.innerHTML = (`
 ${getTimeOfDay()} <br/><br/>
-Сегодня: ${getWeekDay(date)} <br/><br/>
+Сегодня: ${date.toLocaleString('ru', { weekday: 'long' })} <br/><br/>
 Текущее время: ${date.toLocaleTimeString('en')} <br/><br/>
 До нового года осталось ${getNewYear('1 january 2022 00:00:00')} дней
 `);
