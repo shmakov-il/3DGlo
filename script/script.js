@@ -1,23 +1,22 @@
-window.addEventListener('DOMContentLoaded', function () {
-  'use strict';
+window.addEventListener('DOMContentLoaded', () => {
 
   // Timer
-  function countTimer (deadline) {
+  function countTimer(deadline) {
     const timerHours = document.getElementById('timer-hours'),
-          timerMinutes = document.getElementById('timer-minutes'),
-          timerSeconds = document.getElementById('timer-seconds');
+      timerMinutes = document.getElementById('timer-minutes'),
+      timerSeconds = document.getElementById('timer-seconds');
 
-    function getTimeRemaining () {
+    function getTimeRemaining() {
       const dateStop = new Date(deadline).getTime(),
-          dateNow = new Date().getTime(),
-          timeRemaining = (dateStop - dateNow) / 1000,
-          seconds = Math.floor(timeRemaining % 60),
-          minutes = Math.floor((timeRemaining / 60) % 60),
-          hours = Math.floor(timeRemaining / 60 / 60);
-          return {timeRemaining, hours, minutes, seconds};
+        dateNow = new Date().getTime(),
+        timeRemaining = (dateStop - dateNow) / 1000,
+        seconds = Math.floor(timeRemaining % 60),
+        minutes = Math.floor((timeRemaining / 60) % 60),
+        hours = Math.floor(timeRemaining / 60 / 60);
+      return { timeRemaining, hours, minutes, seconds };
     }
 
-    function updateClock () {
+    function updateClock() {
       const timer = getTimeRemaining();
       timerHours.textContent = timer.hours;
       timerMinutes.textContent = timer.minutes;
