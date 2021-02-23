@@ -28,7 +28,6 @@ window.addEventListener('DOMContentLoaded', () => {
         seconds: addZero(seconds)
       };
     };
-
     const updateClock = () => {
       const timer = getTimeRemaining();
       if (timer.timeRemaining > 0) {
@@ -43,10 +42,10 @@ window.addEventListener('DOMContentLoaded', () => {
         timerSeconds.textContent = '00';
       }
     };
+    updateClock();
     setInterval(updateClock, 1000);
   };
-  countTimer('25 february 2021 13:47:00');
-
+  countTimer('29 february 2021 20:35:00');
 
   // Menu
   const toggleMenu = () => {
@@ -64,8 +63,6 @@ window.addEventListener('DOMContentLoaded', () => {
     menuItems.forEach(item => item.addEventListener('click', handlerMenu));
   };
   toggleMenu();
-
-
 
   // PopUp
   const togglePopUp = () => {
