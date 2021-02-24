@@ -42,10 +42,10 @@ window.addEventListener('DOMContentLoaded', () => {
         timerSeconds.textContent = '00';
       }
     };
-    updateClock();
     setInterval(updateClock, 1000);
+    updateClock();
   };
-  countTimer('29 february 2021 20:35:00');
+  countTimer('24 february 2021 20:52:10');
 
   // Menu
   const toggleMenu = () => {
@@ -53,37 +53,88 @@ window.addEventListener('DOMContentLoaded', () => {
       menu = document.querySelector('menu'),
       btnCloseMenu = document.querySelector('.close-btn'),
       menuItems = menu.querySelectorAll('ul > li');
-
     const handlerMenu = () => {
       menu.classList.toggle('active-menu');
     };
-
-    btnMenu.addEventListener('click', handlerMenu);
-    btnCloseMenu.addEventListener('click', handlerMenu);
-    menuItems.forEach(item => item.addEventListener('click', handlerMenu));
+    const width = document.documentElement.offsetWidth;
+    if (width < 768) {
+      btnMenu.addEventListener('click', () => {
+        menu.style.transform = 'translateX(100%)';
+      });
+      btnCloseMenu.addEventListener('click', () => {
+        menu.style.transform = 'translateX(-100%)';
+      });
+      menuItems.forEach(elem => elem.addEventListener('click', () => {
+        menu.style.transform = 'translateX(-100%)';
+      }));
+    } else {
+      btnMenu.addEventListener('click', handlerMenu);
+      btnCloseMenu.addEventListener('click', handlerMenu);
+      menuItems.forEach(elem => elem.addEventListener('click', handlerMenu()));
+    }
   };
   toggleMenu();
 
   // PopUp
   const togglePopUp = () => {
-    const popup = document.querySelector('.popup'),
-      btnPopup = document.querySelectorAll('.popup-btn'),
-      btnPopupClose = document.querySelector('.popup-close');
-
-    btnPopup.forEach(item => {
-      item.addEventListener('click', () => {
-        popup.style.display = 'block';
+    const popUp = document.querySelector('.popup'),
+      popUpContent = document.querySelector('.popup-content'),
+      popUpBtn = document.querySelectorAll('.popup-btn'),
+      closePopUpBtn = document.querySelector('.popup-close');
+    const openPopUp = () => {
+      let count = 0;
+      const height = document.documentElement.offsetHeight / 50;
+      const openPopUp = setInterval(() => {
+        count += 5;
+        if ((count - 5) < height) {
+          popUpContent.style.top = count + 'px';
+        } else if (count === height) {
+          clearInterval(openPopUp);
+        }
+      }, 20);
+    };
+    const closePopUp = () => {
+      let count = 0;
+      const height = document.documentElement.offsetHeight / 50;
+      const closePopUp = setInterval(() => {
+        count += 5;
+        if ((count - 5) < height) {
+          const top = height - count;
+          popUpContent.style.top = top + 'px';
+        } else if (count === height) {
+          clearInterval(closePopUp);
+        }
+      }, 20);
+    };
+    const width = document.documentElement.offsetWidth;
+    if (width < 768) {
+      popUpBtn.forEach(item => {
+        item.addEventListener('click', () => {
+          popUp.style.display = 'block';
+        });
       });
-    });
-
-    btnPopupClose.addEventListener('click', () => {
-      popup.style.display = 'none';
-    });
-
-
-
-
-
+      closePopUpBtn.addEventListener('click', () => {
+        popUp.style.display = 'none';
+      });
+      popUp.addEventListener('click', () => {
+        popUp.style.display = 'none';
+      });
+    } else {
+      popUpBtn.forEach(item => {
+        item.addEventListener('click', () => {
+          popUp.style.display = 'block';
+          openPopUp();
+        });
+      });
+      closePopUpBtn.addEventListener('click', () => {
+        popUp.style.display = 'none';
+        closePopUp();
+      });
+      popUp.addEventListener('click', () => {
+        popUp.style.display = 'none';
+        closePopUp();
+      });
+    }
   };
   togglePopUp();
 
