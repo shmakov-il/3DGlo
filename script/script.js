@@ -1,5 +1,5 @@
 window.addEventListener('DOMContentLoaded', () => {
-  'use strict';
+
   // Timer
   const countTimer = deadline => {
     const timerHours = document.getElementById('timer-hours'),
@@ -45,32 +45,50 @@ window.addEventListener('DOMContentLoaded', () => {
     setInterval(updateClock, 1000);
     updateClock();
   };
-  countTimer('24 february 2021 20:52:10');
+  countTimer('26 february 2021 20:52:10');
 
   // Menu
   const toggleMenu = () => {
-    const btnMenu = document.querySelector('.menu'),
-      menu = document.querySelector('menu'),
-      btnCloseMenu = document.querySelector('.close-btn'),
-      menuItems = menu.querySelectorAll('ul > li');
+    const menu = document.querySelector('menu');
+
     const handlerMenu = () => {
       menu.classList.toggle('active-menu');
     };
+
+    const eventListenerAnimation = () => {
+      document.addEventListener('click', event => {
+        const target = event.target,
+          targetMenu = target.closest('.menu'),
+          targetCloseBtn = target.closest('.close-btn'),
+          targetMenuItem = target.closest('ul>li');
+        if (targetMenu !== null) {
+          menu.style.transform = 'translateX(100%)';
+        } else if (targetCloseBtn !== null) {
+          menu.style.transform = 'translateX(-100%)';
+        } else if (targetMenuItem !== null) {
+          menu.style.transform = 'translateX(-100%)';
+        }
+      });
+    };
+
+    const eventListener = () => {
+      document.addEventListener('click', event => {
+        const target = event.target,
+          targetMenu = target.closest('.menu'),
+          targetCloseBtn = target.closest('.close-btn');
+        if (targetMenu !== null) {
+          handlerMenu();
+        } else if (targetCloseBtn !== null) {
+          handlerMenu();
+        }
+      });
+    };
+
     const width = document.documentElement.offsetWidth;
     if (width < 768) {
-      btnMenu.addEventListener('click', () => {
-        menu.style.transform = 'translateX(100%)';
-      });
-      btnCloseMenu.addEventListener('click', () => {
-        menu.style.transform = 'translateX(-100%)';
-      });
-      menuItems.forEach(elem => elem.addEventListener('click', () => {
-        menu.style.transform = 'translateX(-100%)';
-      }));
+      eventListenerAnimation();
     } else {
-      btnMenu.addEventListener('click', handlerMenu);
-      btnCloseMenu.addEventListener('click', handlerMenu);
-      menuItems.forEach(elem => elem.addEventListener('click', handlerMenu));
+      eventListener();
     }
   };
   toggleMenu();
@@ -80,7 +98,6 @@ window.addEventListener('DOMContentLoaded', () => {
     const popUp = document.querySelector('.popup'),
       popUpContent = document.querySelector('.popup-content'),
       popUpBtn = document.querySelectorAll('.popup-btn');
-      // closePopUpBtn = document.querySelector('.popup-close');
     const openPopUp = () => {
       let count = 0;
       const height = document.documentElement.offsetHeight / 50;
@@ -93,19 +110,6 @@ window.addEventListener('DOMContentLoaded', () => {
         }
       }, 20);
     };
-    // const closePopUp = () => {
-    //   let count = 0;
-    //   const height = document.documentElement.offsetHeight / 50;
-    //   const closePopUp = setInterval(() => {
-    //     count += 5;
-    //     if ((count - 5) < height) {
-    //       const top = height - count;
-    //       popUpContent.style.top = top + 'px';
-    //     } else if (count === height) {
-    //       clearInterval(closePopUp);
-    //     }
-    //   }, 20);
-    // };
     const width = document.documentElement.offsetWidth;
     if (width < 768) {
       popUpBtn.forEach(item => {
@@ -113,12 +117,6 @@ window.addEventListener('DOMContentLoaded', () => {
           popUp.style.display = 'block';
         });
       });
-      // closePopUpBtn.addEventListener('click', () => {
-      //   popUp.style.display = 'none';
-      // });
-      // popUp.addEventListener('click', () => {
-      //   popUp.style.display = 'none';
-      // });
     } else {
       popUpBtn.forEach(item => {
         item.addEventListener('click', () => {
@@ -126,14 +124,6 @@ window.addEventListener('DOMContentLoaded', () => {
           openPopUp();
         });
       });
-      // closePopUpBtn.addEventListener('click', () => {
-      //   popUp.style.display = 'none';
-      //   closePopUp();
-      // });
-      // popUp.addEventListener('click', () => {
-      //   popUp.style.display = 'none';
-      //   closePopUp();
-      // });
     }
     popUp.addEventListener('click', event => {
       let target = event.target;
