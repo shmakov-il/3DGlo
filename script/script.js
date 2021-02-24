@@ -70,7 +70,7 @@ window.addEventListener('DOMContentLoaded', () => {
     } else {
       btnMenu.addEventListener('click', handlerMenu);
       btnCloseMenu.addEventListener('click', handlerMenu);
-      menuItems.forEach(elem => elem.addEventListener('click', handlerMenu()));
+      menuItems.forEach(elem => elem.addEventListener('click', handlerMenu));
     }
   };
   toggleMenu();
