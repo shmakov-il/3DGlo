@@ -112,7 +112,7 @@ window.addEventListener('DOMContentLoaded', () => {
     };
 
     service.addEventListener('click', event => {
-      let target = event.target;
+      const target = event.target;
       if (target.classList.contains('popup-btn')) {
         popUpBtn.forEach(item => {
           if (item === target && window.innerWidth < 768) {
@@ -174,12 +174,22 @@ window.addEventListener('DOMContentLoaded', () => {
   // Слайдер
   const slider = () => {
     const slide = document.querySelectorAll('.portfolio-item'),
-      btn = document.querySelectorAll('.portfolio-btn'),
-      dot = document.querySelectorAll('.dot'),
       slider = document.querySelector('.portfolio-content');
+
+    //добавление точек
+    slide.forEach(() => {
+      const liPoint = document.createElement('li');
+      liPoint.setAttribute('class', 'dot');
+      document.querySelector('.portfolio-dots').appendChild(liPoint);
+    });
 
     let currentSlide = 0,
       interval;
+
+    const dot = document.querySelectorAll('.dot');
+    if (currentSlide === 0) {
+      dot[0].setAttribute('class', 'dot dot-active');
+    }
 
     const prevSlide = (elem, index, strClass) => {
       elem[index].classList.remove(strClass);
@@ -211,7 +221,7 @@ window.addEventListener('DOMContentLoaded', () => {
     slider.addEventListener('click', event => {
       event.preventDefault();
 
-      let target = event.target;
+      const target = event.target;
 
       if (!target.matches('.portfolio-btn, .dot')) {
         return;
@@ -253,6 +263,7 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     });
     startSlide();
+
   };
   slider();
 
