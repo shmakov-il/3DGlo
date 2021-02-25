@@ -176,7 +176,6 @@ window.addEventListener('DOMContentLoaded', () => {
     const slide = document.querySelectorAll('.portfolio-item'),
       slider = document.querySelector('.portfolio-content');
 
-    //добавление точек
     slide.forEach(() => {
       const liPoint = document.createElement('li');
       liPoint.setAttribute('class', 'dot');
@@ -194,7 +193,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const prevSlide = (elem, index, strClass) => {
       elem[index].classList.remove(strClass);
     };
-
+    
     const nextSlide = (elem, index, strClass) => {
       elem[index].classList.add(strClass);
     };
@@ -263,8 +262,9 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     });
     startSlide();
-
   };
   slider();
+
+
 
 });
