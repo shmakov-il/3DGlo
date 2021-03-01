@@ -1,5 +1,5 @@
 window.addEventListener('DOMContentLoaded', () => {
-
+  'use strict';
   // Timer
   const countTimer = deadline => {
     const timerHours = document.getElementById('timer-hours'),
@@ -189,15 +189,12 @@ window.addEventListener('DOMContentLoaded', () => {
     if (currentSlide === 0) {
       dot[0].setAttribute('class', 'dot dot-active');
     }
-
     const prevSlide = (elem, index, strClass) => {
       elem[index].classList.remove(strClass);
     };
-    
     const nextSlide = (elem, index, strClass) => {
       elem[index].classList.add(strClass);
     };
-
     const autoPlaySlide = () => {
       prevSlide(slide, currentSlide, 'portfolio-item-active');
       prevSlide(dot, currentSlide, 'dot-active');
@@ -212,22 +209,17 @@ window.addEventListener('DOMContentLoaded', () => {
     const startSlide = (time = 3000) => {
       interval = setInterval(autoPlaySlide, time);
     };
-
     const stopSlide = () => {
       clearInterval(interval);
     };
-
     slider.addEventListener('click', event => {
       event.preventDefault();
-
       const target = event.target;
-
       if (!target.matches('.portfolio-btn, .dot')) {
         return;
       }
       prevSlide(slide, currentSlide, 'portfolio-item-active');
       prevSlide(dot, currentSlide, 'dot-active');
-
       if (target.matches('#arrow-right')) {
         currentSlide++;
       } else if (target.matches('#arrow-left')) {
@@ -264,6 +256,92 @@ window.addEventListener('DOMContentLoaded', () => {
     startSlide();
   };
   slider();
+
+  // Наша команда
+  const changeImage = () => {
+    const commandPhoto = document.querySelectorAll('.command__photo');
+
+    commandPhoto.forEach(item => {
+      item.addEventListener('mouseover', event => {
+        const target = event.target;
+        [target.src, target.dataset.img] = [target.dataset.img, target.src];
+      });
+    });
+
+    commandPhoto.forEach(item => {
+      item.addEventListener('mouseout', event => {
+        const target = event.target;
+        [target.dataset.img, target.src] = [target.src, target.dataset.img];
+      });
+    });
+  };
+  changeImage();
+
+  // Калькулятор (ввод только цифр)
+  const validateCalculator = () => {
+    const calcBlock = document.querySelector('.calc-block');
+
+    calcBlock.addEventListener('input', event => {
+      const target = event.target;
+      if (target.matches('[type="text"]')) {
+        target.value = target.value.replace(/\D/g, '');
+      }
+    });
+  };
+  validateCalculator();
+
+  // Проверка номера телефона
+  const validateNumberPhone = () => {
+    const phoneNumber = document.querySelectorAll('[placeholder="Номер телефона"]');
+    phoneNumber.forEach(item => {
+      item.addEventListener('input', event => {
+        const target = event.target;
+        target.value = target.value.replace(/[^\-()\d]/g, '');
+      });
+    });
+  };
+  validateNumberPhone();
+
+  // Проверка email
+  const validateEmail = () => {
+    const email = document.querySelectorAll('[placeholder="E-mail"');
+    email.forEach(item => {
+      item.addEventListener('input', event => {
+        const target = event.target;
+        target.value = target.value.replace(/[^a-z@\-_.!~*']/ig, '');
+      });
+    });
+  };
+  validateEmail();
+
+  // Проверка имени и сообщения
+  const validateNameAndMessage = () => {
+    const yourName = document.querySelectorAll('[placeholder="Ваше имя"]'),
+      yourMessage = document.querySelectorAll('[placeholder="Ваше сообщение"]');
+
+    const check = event => {
+      const target = event.target;
+      target.value = target.value.replace(/[^а-я-ё\-\s]/ig, '');
+    };
+
+    yourName.forEach(item => {
+      item.addEventListener('input', check);
+      item.addEventListener('blur', event => {
+        const target = event.target;
+        target.value = target.value.replace(/ +/g, ' ').trim();
+        target.value = target.value.replace(/([А-ЯЁ])/g, x => x.toLowerCase());
+        target.value = target.value.replace(/(( |^)[а-яё])(?=[а-яё])/g, x => x.toUpperCase());
+      });
+    });
+    yourMessage.forEach(item => {
+      item.addEventListener('input', check);
+      item.addEventListener('blur', event => {
+        const target = event.target;
+        target.value = target.value.replace(/^[ -]*|( |-)(?=\1)|[ -]*$/g, '').replace(/ +/g, ' ').trim();
+      });
+    });
+  };
+  validateNameAndMessage();
 
 
 
