@@ -46,7 +46,7 @@ window.addEventListener('DOMContentLoaded', () => {
     };
     updateClockAnimation = requestAnimationFrame(updateClock);
   };
-  countTimer('29 february 2021 20:52:10');
+  countTimer('8 march 2021 20:52:10');
 
   // Menu
   const toggleMenu = () => {
@@ -296,7 +296,14 @@ window.addEventListener('DOMContentLoaded', () => {
     phoneNumber.forEach(item => {
       item.addEventListener('input', event => {
         const target = event.target;
-        target.value = target.value.replace(/[^\-()\d]/g, '');
+        target.value = target.value.replace(/[^+0-9]/g, '');
+      });
+    });
+    const phoneNumberModal = document.querySelectorAll('[placeholder="Ваш номер телефона"]');
+    phoneNumberModal.forEach(item => {
+      item.addEventListener('input', event => {
+        const target = event.target;
+        target.value = target.value.replace(/[^+0-9]/g, '');
       });
     });
   };
@@ -319,13 +326,18 @@ window.addEventListener('DOMContentLoaded', () => {
     const yourName = document.querySelectorAll('[placeholder="Ваше имя"]'),
       yourMessage = document.querySelectorAll('[placeholder="Ваше сообщение"]');
 
-    const check = event => {
+    const checkName = event => {
       const target = event.target;
       target.value = target.value.replace(/[^а-я-ё\-\s]/ig, '');
     };
 
+    const checkMessage = event => {
+      const target = event.target;
+      target.value = target.value.replace(/[^а-я-ё\d\s.,!?:;]/ig, '');
+    };
+
     yourName.forEach(item => {
-      item.addEventListener('input', check);
+      item.addEventListener('input', checkName);
       item.addEventListener('blur', event => {
         const target = event.target;
         target.value = target.value.replace(/ +/g, ' ').trim();
@@ -334,7 +346,7 @@ window.addEventListener('DOMContentLoaded', () => {
       });
     });
     yourMessage.forEach(item => {
-      item.addEventListener('input', check);
+      item.addEventListener('input', checkMessage);
       item.addEventListener('blur', event => {
         const target = event.target;
         target.value = target.value.replace(/^[ -]*|( |-)(?=\1)|[ -]*$/g, '').replace(/ +/g, ' ').trim();
@@ -345,7 +357,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
   // Калькулятор
-
   const calc = (price = 100) => {
 
     const calcBlock = document.querySelector('.calc-block'),
@@ -376,9 +387,9 @@ window.addEventListener('DOMContentLoaded', () => {
       if (typeValue && squareValue) {
         total = price * typeValue * squareValue * countValue * dayValue;
 
-        const time = 1000,
-          step = 10;
         const outNum = num => {
+          const time = 1000,
+            step = 0.1 * num;
           let count = 0;
           const timeInterval = Math.floor(time / (num / step));
           const interval = setInterval(() => {
@@ -390,6 +401,7 @@ window.addEventListener('DOMContentLoaded', () => {
           }, timeInterval);
         };
         outNum(total);
+
       }
     };
 
@@ -405,6 +417,58 @@ window.addEventListener('DOMContentLoaded', () => {
   };
   calc();
 
+  // Отправка данных на сервер
+  const sendForm = form => {
+    const errorMessage = 'Что-то пошло не так...',
+      loadMessage = 'Загрузка...',
+      successMessage = 'Отправлено!',
+      statusMessage = document.createElement('div');
+
+    statusMessage.style.cssText = `font-size: 2rem; 
+    color: white; 
+    `;
+
+    const postData = (body, outputData, errorData) => {
+      const request = new XMLHttpRequest();
+      request.addEventListener('readystatechange', () => {
+        if (request.readyState !== 4) {
+          return;
+        }
+        if (request.status === 200) {
+          outputData();
+          form.reset();
+        } else {
+          errorData(request.status);
+        }
+      });
+      request.open('POST', './server.php');
+      request.setRequestHeader('Content-Type', 'application/json');
+      request.send(JSON.stringify(body));
+    };
+
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      form.appendChild(statusMessage);
+      statusMessage.textContent = loadMessage;
+      const formData = new FormData(form),
+        body = {};
+      formData.forEach((val, key) => {
+        body[key] = val;
+      });
+      postData(body,
+        () => {
+          statusMessage.textContent = successMessage;
+        },
+        error => {
+          statusMessage.textContent = errorMessage;
+          console.error(error);
+        }
+      );
+    });
+  };
+  const forms = document.querySelectorAll('form');
+  forms.forEach(item => {
+    sendForm(item);
+  });
+
 });
-
-
