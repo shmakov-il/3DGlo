@@ -355,7 +355,6 @@ window.addEventListener('DOMContentLoaded', () => {
   };
   validateNameAndMessage();
 
-
   // Калькулятор
   const calc = (price = 100) => {
 
@@ -437,6 +436,12 @@ window.addEventListener('DOMContentLoaded', () => {
         if (request.status === 200) {
           outputData();
           form.reset();
+          setTimeout(() => {
+            statusMessage.style.cssText = `font-size: 2rem; 
+            color: white;
+            display: none; 
+            `;
+          }, 3000);
         } else {
           errorData(request.status);
         }
@@ -446,29 +451,28 @@ window.addEventListener('DOMContentLoaded', () => {
       request.send(JSON.stringify(body));
     };
 
-    form.addEventListener('submit', event => {
-      event.preventDefault();
-      form.appendChild(statusMessage);
-      statusMessage.textContent = loadMessage;
-      const formData = new FormData(form),
-        body = {};
-      formData.forEach((val, key) => {
-        body[key] = val;
-      });
-      postData(body,
-        () => {
-          statusMessage.textContent = successMessage;
-        },
-        error => {
-          statusMessage.textContent = errorMessage;
-          console.error(error);
-        }
-      );
+    form.appendChild(statusMessage);
+    statusMessage.textContent = loadMessage;
+    const formData = new FormData(form),
+      body = {};
+    formData.forEach((val, key) => {
+      body[key] = val;
     });
+    postData(body,
+      () => {
+        statusMessage.textContent = successMessage;
+      },
+      error => {
+        statusMessage.textContent = errorMessage;
+        console.error(error);
+      }
+    );
   };
-  const forms = document.querySelectorAll('form');
-  forms.forEach(item => {
-    sendForm(item);
-  });
 
+  document.body.addEventListener('submit', event => {
+    event.preventDefault();
+    if (event.target.tagName.toLowerCase() === 'form') {
+      sendForm(event.target);
+    }
+  });
 });
