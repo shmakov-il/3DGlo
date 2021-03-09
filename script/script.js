@@ -471,14 +471,22 @@ window.addEventListener('DOMContentLoaded', () => {
     color: white; 
     `;
 
-    const postData = body =>
-      fetch('./server.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
+    const postData = body => new Promise((resolve, reject) => {
+      const request = new XMLHttpRequest();
+      request.addEventListener('readystatechange', () => {
+        if (request.readyState !== 4) {
+          return;
+        }
+        if (request.status === 200) {
+          resolve();
+        } else {
+          reject();
+        }
       });
+      request.open('POST', './server.php');
+      request.setRequestHeader('Content-Type', 'application/json');
+      request.send(JSON.stringify(body));
+    });
 
     form.appendChild(statusMessage);
     statusMessage.textContent = loadMessage;
@@ -489,19 +497,17 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 
     postData(body)
-      .then(response => {
-        if (response.status !== 200) {
-          throw new Error('status network not 200');
-        }
+      .then(() => {
         form.reset();
         statusMessage.innerHTML = successMessage;
         setTimeout(() => {
-          statusMessage.parentNode.removeChild(statusMessage);
-        }, 5000);
+          statusMessage.style.cssText = `
+          display: none;
+          `;
+        }, 3000);
       })
-      .catch(error => {
+      .catch(() => {
         statusMessage.innerHTML = errorMessage;
-        console.error(error);
       });
   };
 
