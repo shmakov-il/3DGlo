@@ -318,6 +318,13 @@ window.addEventListener('DOMContentLoaded', () => {
         target.value = target.value.replace(/[^a-z@\-_.!~*']/ig, '');
       });
     });
+    const emailModal = document.querySelectorAll('[placeholder="Ваш E-mail"');
+    emailModal.forEach(item => {
+      item.addEventListener('input', event => {
+        const target = event.target;
+        target.value = target.value.replace(/[^a-z@\-_.!~*']/ig, '');
+      });
+    });
   };
   validateEmail();
 
@@ -354,6 +361,43 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   };
   validateNameAndMessage();
+
+  // Проверка ввода +7 и 8 в номере телефона
+  const formValidatorPhone = () => {
+    const form = document.querySelectorAll('form');
+    form.forEach(item => {
+      item.querySelectorAll('input').forEach(item => {
+        item.addEventListener('blur', event => {
+          const target = event.target;
+          if (target.placeholder === 'Номер телефона' || target.placeholder === 'Ваш номер телефона') {
+            const checkNumber = reg => {
+              const firstDigit = reg.substr(0, 1);
+              let inputValue = target.value;
+              if (inputValue.length < 11) {
+                inputValue = '';
+                return inputValue;
+              } else {
+                if (firstDigit === '+') {
+                  inputValue = inputValue.substr(0, 12);
+                  return inputValue;
+                } else if (firstDigit === '7' || firstDigit === '8') {
+                  inputValue = inputValue.substr(0, 11);
+                  return inputValue;
+                } else if (firstDigit !== '+' || firstDigit !== '7' || firstDigit !== '8') {
+                  inputValue = '';
+                  return inputValue;
+                }
+              }
+            };
+            const reg = target.value.replace(/[a-zа-яё/.,\-=_)({*&$%#@'"!~^:;?`<>№|\\})]/gi, '');
+            const result = checkNumber(reg);
+            target.value = result;
+          }
+        });
+      });
+    });
+  };
+  formValidatorPhone();
 
   // Калькулятор
   const calc = (price = 100) => {
@@ -427,29 +471,22 @@ window.addEventListener('DOMContentLoaded', () => {
     color: white; 
     `;
 
-    const postData = (body, outputData, errorData) => {
+    const postData = body => new Promise((resolve, reject) => {
       const request = new XMLHttpRequest();
       request.addEventListener('readystatechange', () => {
         if (request.readyState !== 4) {
           return;
         }
         if (request.status === 200) {
-          outputData();
-          form.reset();
-          setTimeout(() => {
-            statusMessage.style.cssText = `font-size: 2rem; 
-            color: white;
-            display: none; 
-            `;
-          }, 3000);
+          resolve();
         } else {
-          errorData(request.status);
+          reject();
         }
       });
       request.open('POST', './server.php');
       request.setRequestHeader('Content-Type', 'application/json');
       request.send(JSON.stringify(body));
-    };
+    });
 
     form.appendChild(statusMessage);
     statusMessage.textContent = loadMessage;
@@ -458,21 +495,24 @@ window.addEventListener('DOMContentLoaded', () => {
     formData.forEach((val, key) => {
       body[key] = val;
     });
-    postData(body,
-      () => {
-        statusMessage.textContent = successMessage;
-      },
-      error => {
-        statusMessage.textContent = errorMessage;
-        console.error(error);
-      }
-    );
+
+    postData(body)
+      .then(() => {
+        form.reset();
+        statusMessage.innerHTML = successMessage;
+        setTimeout(() => {
+          statusMessage.style.cssText = `
+          display: none;
+          `;
+        }, 3000);
+      })
+      .catch(() => {
+        statusMessage.innerHTML = errorMessage;
+      });
   };
 
   document.body.addEventListener('submit', event => {
     event.preventDefault();
-    if (event.target.tagName.toLowerCase() === 'form') {
-      sendForm(event.target);
-    }
+    sendForm(event.target);
   });
 });
