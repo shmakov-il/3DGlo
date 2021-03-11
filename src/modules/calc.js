@@ -1,4 +1,20 @@
 const calc = (price = 100) => {
+  function animate({timing, draw, duration}) {
+    const start = performance.now();
+
+    requestAnimationFrame(function animate(time) {
+      let timeFraction = (time - start) / duration;
+      if (timeFraction > 1) {
+        timeFraction = 1;
+      }
+
+      const progress = timing(timeFraction);
+      draw(progress);
+      if (timeFraction < 1) {
+        requestAnimationFrame(animate);
+      }
+    });
+  }
 
   const calcBlock = document.querySelector('.calc-block'),
     calcType = document.querySelector('.calc-type'),
@@ -27,26 +43,20 @@ const calc = (price = 100) => {
 
     if (typeValue && squareValue) {
       total = price * typeValue * squareValue * countValue * dayValue;
-
-      const outNum = num => {
-        const time = 1000,
-          step = 0.1 * num;
-        let count = 0;
-        const timeInterval = Math.floor(time / (num / step));
-        const interval = setInterval(() => {
-          count += step;
-          if (count === num) {
-            clearInterval(interval);
-          }
-          calcTotal.textContent = count;
-        }, timeInterval);
-      };
-      outNum(total);
-
     }
+
+    animate({
+      duration: 500,
+      timing(timeFraction) {
+        return timeFraction;
+      },
+      draw(progress) {
+        calcTotal.textContent = Math.floor(progress * total);
+      }
+    });
   };
 
-  calcBlock.addEventListener('change', event => {
+  calcBlock.addEventListener('input', event => {
     const target = event.target;
     if (target.matches('.calc-type') ||
       target.matches('.calc-square') ||

@@ -1,6 +1,7 @@
 const validateEmail = () => {
   const email = document.querySelectorAll('[placeholder="E-mail"');
   email.forEach(item => {
+    item.setAttribute('required', '');
     item.addEventListener('input', event => {
       const target = event.target;
       target.value = target.value.replace(/[^a-z@\-_.!~*']/ig, '');
@@ -8,6 +9,7 @@ const validateEmail = () => {
   });
   const emailModal = document.querySelectorAll('[placeholder="Ваш E-mail"');
   emailModal.forEach(item => {
+    item.setAttribute('required', '');
     item.addEventListener('input', event => {
       const target = event.target;
       target.value = target.value.replace(/[^a-z@\-_.!~*']/ig, '');
