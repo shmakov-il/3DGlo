@@ -33,8 +33,9 @@ const sendForm = form => {
       form.reset();
       statusMessage.innerHTML = successMessage;
       setTimeout(() => {
-        statusMessage.parentNode.removeChild(statusMessage);
-      }, 5000);
+        statusMessage.parentNode.removeChild(statusMessage),
+        document.querySelector('.popup').style.display = 'none';
+      }, 4000);
     })
     .catch(error => {
       statusMessage.innerHTML = errorMessage;

@@ -16,7 +16,7 @@ import calc from './modules/calc';
 import activateSendForm from './modules/sendForm';
 
 // Timer
-countTimer('12 march 2021 20:52:10');
+countTimer('16 march 2021');
 // Menu
 toggleMenu();
 // PopUp

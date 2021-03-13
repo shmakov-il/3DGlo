@@ -19,6 +19,9 @@ const validateNameAndMessage = () => {
       target.value = target.value.replace(/ +/g, ' ').trim();
       target.value = target.value.replace(/([А-ЯЁ])/g, x => x.toLowerCase());
       target.value = target.value.replace(/(( |^)[а-яё])(?=[а-яё])/g, x => x.toUpperCase());
+      if (target.value.length === 1) {
+        target.value = '';
+      }
     });
   });
   yourMessage.forEach(item => {
