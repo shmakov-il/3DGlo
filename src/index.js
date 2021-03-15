@@ -14,6 +14,7 @@ import validateNameAndMessage from './modules/validateNameAndMessage';
 import formValidatorPhone from './modules/formValidatorPhone';
 import calc from './modules/calc';
 import activateSendForm from './modules/sendForm';
+import sliderCarusel from './modules/sliderCarusel';
 
 // Timer
 countTimer('16 march 2021');
@@ -41,3 +42,5 @@ formValidatorPhone();
 calc();
 // Отправка данных на сервер
 activateSendForm();
+// Слайдер-карусель
+sliderCarusel();
