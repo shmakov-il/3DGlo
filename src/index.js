@@ -15,9 +15,10 @@ import formValidatorPhone from './modules/formValidatorPhone';
 import calc from './modules/calc';
 import activateSendForm from './modules/sendForm';
 import sliderCarusel from './modules/sliderCarusel';
+import scroll from './modules/scroll';
 
 // Timer
-countTimer('16 march 2021');
+countTimer('21 march 2021');
 // Menu
 toggleMenu();
 // PopUp
@@ -44,3 +45,5 @@ calc();
 activateSendForm();
 // Слайдер-карусель
 sliderCarusel();
+// Скролл
+scroll();
