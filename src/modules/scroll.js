@@ -1,19 +1,26 @@
 const scroll = () => {
-  const anchors = document.querySelectorAll('a[href*="#"');
-  for (const anchor of anchors) {
-    anchor.addEventListener('click', event => {
-      event.preventDefault();
-      const blockId = anchor.getAttribute('href'),
+  const container = document.querySelector('#main-view');
+  container.addEventListener('click', event => {
+    event.preventDefault();
+    const target = event.target,
+      targetMenuItem = target.closest('a');
+
+    const position = element => {
+      const rect = element.getBoundingClientRect(),
+        scrollTop = window.pageYOffset || document.documentElement.scrollTop,
+        idElemY = rect.top + scrollTop;
+      window.scrollTo({
+        top: idElemY,
+        behavior: 'smooth'
+      });
+    };
+
+    if (targetMenuItem) {
+      const blockId = targetMenuItem.getAttribute('href'),
         idElem = document.querySelector(blockId);
-      if (idElem) {
-        const idElemY = idElem.offsetTop;
-        window.scrollTo({
-          top: idElemY,
-          behavior: 'smooth'
-        });
-      }
-    });
-  }
+      position(idElem);
+    }
+  });
 };
 
 export default scroll;
